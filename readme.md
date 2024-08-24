@@ -1,7 +1,11 @@
 yes this code is terrible, and admittedly, i dont care
+
 yes this code is a mess
+
 yes i copied the idea of this comment
+
 yes i wont do anything about it
+
 -zz
 
 how to start up this mess:
@@ -11,4 +15,5 @@ how to start up this mess:
 4. otherwise, it's running
 
 zzbot.js created by delusions
+
 roarbot created by mbw (@mybearworld on meower)
