@@ -8,6 +8,10 @@ yes i wont do anything about it
 
 -zz
 
+YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE BOTUSERNAME AND BOTPASSWORD KEYS!!!!!
+
+OTHERWISE THE BOT WILL NOT WORK!!!!!!!
+
 how to start up this mess:
 1. cd to the file's directory in cmd
 2. do `deno run --allow-all main.js`
