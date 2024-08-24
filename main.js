@@ -1,6 +1,6 @@
 import { RoarBot } from "@mbw/roarbot";
 import chalk from "npm:chalk";
-import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
+import { initChat } from "./@mumulhl/duckduckgo-ai-chat/";
 const log = console.log;
 log(chalk.blue(`setting ai model...`));
 const ai = await initChat("gpt-4o-mini");
