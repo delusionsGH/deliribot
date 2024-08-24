@@ -14,7 +14,7 @@ bot.command("about", { // sample command, copy for new commands
     args: [],
     fn: async function (reply, _args, _post) {
         await reply(
-            '```\ndeliribot (previously zzbot.js)\nversion v2.1.0 (230824)\nroarbot made by mybearworld, deliribot by delusions\n\nlatest command added: ai\n"does the ai thing"',
+            '```\ndeliribot (previously zzbot.js)\nversion v2.1.6 (240824)\nroarbot made by mybearworld, deliribot by delusions\n\nlatest command added: ai\n"does the ai thing"',
         );
     },
 });
