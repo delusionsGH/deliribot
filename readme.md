@@ -8,7 +8,7 @@ yes i wont do anything about it
 
 -zz
 
-YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE BOTUSERNAME AND BOTPASSWORD KEYS!!!!!
+YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
 
 OTHERWISE THE BOT WILL NOT WORK!!!!!!!
 

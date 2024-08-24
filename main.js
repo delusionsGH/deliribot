@@ -7,7 +7,7 @@ const ai = await initChat("gpt-4o-mini");
 const aiModel = "gpt-4o-mini";
 log(chalk.blue(`set model to ${aiModel}.`));
 const bot = new RoarBot({
-    admins: ["delusions"],
+    admins: [config.adminUsername],
 });
 
 bot.command("about", { // sample command, copy for new commands
