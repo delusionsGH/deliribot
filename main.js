@@ -43,8 +43,7 @@ bot.command("whois", { // looks for the data of a user, YES I KNOW "fetc" IS WEI
 bot.command("error", {
     args: [],
     admin: true,
-    fn: async function (reply, _args, post) {
-        if (post.username === admin) {
+    fn: async function (reply, _args, _post) {
             for (let i = 0; i < 3; i++) {
                 await reply("Uncaught error!");
             }
