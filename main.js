@@ -49,7 +49,7 @@ bot.command("error", {
             }
         }
     },
-});
+);
 bot.command("exit", {
     args: [],
     admin: true,
