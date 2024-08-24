@@ -79,4 +79,4 @@ bot.command("ai", { // ai chat
     },
 );
 const config = JSON.parse(await Deno.readTextFile("config.json"));
-bot.login("deliribot", config.botPassword);
+bot.login(config.botUsername, config.botPassword);
