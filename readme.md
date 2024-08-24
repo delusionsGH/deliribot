@@ -18,6 +18,6 @@ how to start up this mess:
 3. if it nags you to update, shut the bot down with ctrl+c and do `deno add @mbw/roarbot@latest`
 4. otherwise, it's running
 
-deliribot created by delusions
+deliribot created by delusions, developed further by the meower community
 
 roarbot created by mbw (@mybearworld on meower)
