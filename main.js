@@ -1,4 +1,4 @@
-import { RoarBot } from "@mbw/roarbot";
+import { RoarBot } from "./@mbw/roarbot";
 import chalk from "npm:chalk";
 import { initChat } from "./@mumulhl/duckduckgo-ai-chat/";
 const log = console.log;
