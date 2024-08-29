@@ -2,6 +2,7 @@ import { RoarBot } from "@mbw/roarbot";
 import chalk from "npm:chalk";
 import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
 
+const config = JSON.parse(await Deno.readTextFile("config.json"));
 const log = console.log;
 log(chalk.blue(`setting ai model...`));
 const ai = await initChat("gpt-4o-mini");
@@ -79,5 +80,4 @@ bot.command("ai", { // ai chat
     },
 );
 
-const config = JSON.parse(await Deno.readTextFile("config.json"));
 bot.login(config.botUsername, config.botPassword);
