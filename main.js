@@ -31,7 +31,7 @@ bot.command("whois", { // looks for the data of a user, YES I KNOW "fetc" IS WEI
             return;
         }
         log(chalk.green(`fetched @${name}'s userdata`));
-        const result = `# ***@${name}***\n[link to profile picture](https://uploads.meower.org/icons/${fetc.avatar})\n\n**Quote:**\n${fetc.quote.replace(/^/gm, "> ")}\n\n**UUID:** "${fetc.uuid}"\n**Avatar's hex code:**  ${fetc.avatar_color}\n**Permission level**: ${fetc.permissions}`; // combine it all
+        const result = `# ***@${name}***\n[link to profile picture](https://uploads.meower.org/icons/${fetc.avatar})\n\n**Quote:**\n${fetc.quote.replace(/^/gm, "> ")}\n\n**UUID:** "${fetc.uuid}"\n**Avatar's hex code:**  #${fetc.avatar_color}\n**Permission level**: ${fetc.permissions}`; // combine it all
         await reply(result);
         log(chalk.green.bold(`whois successfully run!`)); // yay it worked
     },
