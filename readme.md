@@ -1,7 +1,5 @@
 yes this code is terrible, and admittedly, i dont care
 
-yes this code is a mess
-
 yes i copied the idea of this comment
 
 yes i wont do anything about it
