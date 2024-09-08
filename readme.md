@@ -1,8 +1,9 @@
 ![image](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
 
-YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
-
-OTHERWISE THE BOT WILL NOT WORK!!!!!!!
+> [!WARNING]
+> You need to make a ``config.json`` file with the ```botUsername, botPassword and adminUsername``` keys!
+> 
+> OTHERWISE THE BOT WILL NOT WORK!
 
 how to start up this mess:
 1. cd to the file's directory in cmd
