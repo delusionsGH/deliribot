@@ -1,10 +1,10 @@
-![image](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
+THIS IS THE UNSTABLE/DEVELOPMENT VERSION OF DELIRIBOT, IT WILL BREAK ***A LOT!!!***
 
-YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
+**YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!**
 
 OTHERWISE THE BOT WILL NOT WORK!!!!!!!
 
-how to start up this mess:
+how to start:
 1. cd to the file's directory in cmd
 2. do `deno run --allow-all main.js`
 3. if it nags you to update, shut the bot down with ctrl+c and do `deno add @mbw/roarbot@latest`
