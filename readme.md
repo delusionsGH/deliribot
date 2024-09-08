@@ -1,6 +1,6 @@
 THIS IS THE UNSTABLE/DEVELOPMENT VERSION OF DELIRIBOT, IT WILL BREAK ***A LOT!!!***
 
-**YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!**
+YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
 
 OTHERWISE THE BOT WILL NOT WORK!!!!!!!
 
