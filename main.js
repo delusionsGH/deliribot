@@ -64,7 +64,6 @@ bot.command("echo", { // does the bot work? if this command works, it certainly 
 });
 bot.command("ai", { // ai chat
     args: [{ name: "message", type: "full" }],
-    admin: true,
     fn: async function (reply, [message], _post) {
             log(chalk.blue(`sending message ("${message}")...`));
             const aimessage = await ai.fetchFull(message);
