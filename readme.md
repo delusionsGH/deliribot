@@ -1,10 +1,4 @@
-yes this code is terrible, and admittedly, i dont care
-
-yes i copied the idea of this comment
-
-yes i wont do anything about it
-
--zz
+![image](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
 
 YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
 
