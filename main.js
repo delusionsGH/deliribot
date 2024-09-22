@@ -91,7 +91,7 @@ bot.command("weather", {
     args: [{ name: "city", type: "full" }],
     fn: async function (reply, [city], _post) {
         log(chalk.blue(`Fetching weather for ${city}...`));
-        const apiKey = Deno.env.get("owm_api_key");
+        const apiKey = config.owm_api_key;
         try {
             const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`);
             const data = await response.json();
@@ -113,5 +113,4 @@ Description: ${data.weather[0].description}`;
         }
     },
 });
-
 bot.login(config.botUsername, config.botPassword);
