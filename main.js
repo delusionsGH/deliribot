@@ -97,10 +97,10 @@ bot.command("weather", {
             const data = await response.json();
             if (data.cod === 200) {
                 const weather = `weather in ${data.name}:\n
-Temperature: ${data.main.temp}°C
-Feels like: ${data.main.feels_like}°C
-Humidity: ${data.main.humidity}%
-Description: ${data.weather[0].description}`;
+temp: ${data.main.temp}°C
+what the temp feels like: ${data.main.feels_like}°C
+humidity: ${data.main.humidity}%
+description of the sky: ${data.weather[0].description}`;
                 await reply(weather);
                 log(chalk.green.bold(`weather info delivered`));
             } else {
