@@ -87,4 +87,31 @@ bot.command("joke", { // tells a joke, what else can i say
         }
     },
 });
+bot.command("weather", {
+    args: [{ name: "city", type: "full" }],
+    fn: async function (reply, [city], _post) {
+        log(chalk.blue(`Fetching weather for ${city}...`));
+        const apiKey = Deno.env.get("owm_api_key");
+        try {
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`);
+            const data = await response.json();
+            if (data.cod === 200) {
+                const weather = `weather in ${data.name}:
+Temperature: ${data.main.temp}°C
+Feels like: ${data.main.feels_like}°C
+Humidity: ${data.main.humidity}%
+Description: ${data.weather[0].description}`;
+                await reply(weather);
+                log(chalk.green.bold(`weather info delivered for ${city}`));
+            } else {
+                await reply(`i dont feel like fetching the weather for ${city} rn`);
+                log(chalk.yellow(`could not find info for ${city}`));
+            }
+        } catch (error) {
+            log(chalk.red(`error: ${error.message}`));
+            await reply("i dont feel like fetching the weather rn (joking, something broke)");
+        }
+    },
+});
+
 bot.login(config.botUsername, config.botPassword);
