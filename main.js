@@ -72,5 +72,19 @@ bot.command("ai", { // ai chat
         }
     },
 );
-
+bot.command("joke", { // tells a joke, what else can i say
+    args: [],
+    fn: async function (reply, _args, _post) {
+        log(chalk.blue(`Fetching a joke...`));
+        try {
+            const response = await fetch("https://official-joke-api.appspot.com/random_joke");
+            const joke = await response.json();
+            await reply(`here you go:\n\n${joke.setup}\n${joke.punchline}`);
+            log(chalk.green.bold(`delivered!`));
+        } catch (error) {
+            log(chalk.red(`error fetching: ${error.message}`));
+            await reply("whoops, no joke for you, something's broken 👍");
+        }
+    },
+});
 bot.login(config.botUsername, config.botPassword);
