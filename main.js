@@ -75,7 +75,7 @@ bot.command("ai", { // ai chat
 bot.command("joke", { // tells a joke, what else can i say
     args: [],
     fn: async function (reply, _args, _post) {
-        log(chalk.blue(`Fetching a joke...`));
+        log(chalk.blue(`fetching, give me a second`));
         try {
             const response = await fetch("https://official-joke-api.appspot.com/random_joke");
             const joke = await response.json();
