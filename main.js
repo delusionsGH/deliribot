@@ -96,7 +96,7 @@ bot.command("weather", {
             const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`);
             const data = await response.json();
             if (data.cod === 200) {
-                const weather = `weather in ${data.name}:
+                const weather = `weather in ${data.name}:\n
 Temperature: ${data.main.temp}°C
 Feels like: ${data.main.feels_like}°C
 Humidity: ${data.main.humidity}%
