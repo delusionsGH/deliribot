@@ -90,7 +90,7 @@ bot.command("joke", { // tells a joke, what else can i say
 bot.command("weather", {
     args: [{ name: "city", type: "full" }],
     fn: async function (reply, [city], _post) {
-        log(chalk.blue(`Fetching weather for ${city}...`));
+        log(chalk.blue(`Fetching weather...`));
         const apiKey = config.owm_api_key;
         try {
             const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`);
@@ -102,10 +102,10 @@ Feels like: ${data.main.feels_like}°C
 Humidity: ${data.main.humidity}%
 Description: ${data.weather[0].description}`;
                 await reply(weather);
-                log(chalk.green.bold(`weather info delivered for ${city}`));
+                log(chalk.green.bold(`weather info delivered`));
             } else {
-                await reply(`i dont feel like fetching the weather for ${city} rn`);
-                log(chalk.yellow(`could not find info for ${city}`));
+                await reply(`i dont feel like fetching the weather rn`);
+                log(chalk.yellow(`could not find info`));
             }
         } catch (error) {
             log(chalk.red(`error: ${error.message}`));
