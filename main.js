@@ -104,7 +104,7 @@ description of the sky: ${data.weather[0].description}`;
                 await reply(weather);
                 log(chalk.green.bold(`weather info delivered`));
             } else {
-                await reply(`i dont feel like fetching the weather rn`);
+                await reply(`well guess what, i dont think that place exists`);
                 log(chalk.yellow(`could not find info`));
             }
         } catch (error) {
