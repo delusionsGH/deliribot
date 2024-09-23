@@ -2,6 +2,8 @@ import { RoarBot } from "@mbw/roarbot";
 import chalk from "npm:chalk";
 import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
 import { Octokit } from "@octokit/rest";
+import fetch from "node-fetch";
+const octokit = new Octokit();
 
 const config = JSON.parse(await Deno.readTextFile("config.json"));
 const log = console.log;
@@ -12,7 +14,6 @@ log(chalk.blue(`set model to ${aiModel}.`));
 const bot = new RoarBot({
     admins: [config.adminUsername],
 });
-
 bot.command("about", { // sample command, copy for new commands
     args: [],
     fn: async function (reply, _args, _post) {
@@ -114,8 +115,6 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
-const octokit = new Octokit();
-
 bot.command("githubrepos", {
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
@@ -139,6 +138,68 @@ bot.command("githubrepos", {
         } catch (error) {
             log(chalk.red(`error fetching repositories: ${error.message}`));
             await reply(`error! please make sure username is correct`);
+        }
+    },
+});
+bot.command("npm", {
+    args: [{ name: "package", type: "string" }],
+    fn: async function (reply, [packageName], _post) {
+        log(chalk.blue(`Fetching npm package info...`));
+        try {
+            const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            if (data.error) {
+                await reply(`packagenot found!`);
+                return;
+            }
+
+            const latestVersion = data['dist-tags'].latest;
+            const packageInfo = data.versions[latestVersion];
+
+            const infoMessage = `
+# ${packageName}
+latest version: ${latestVersion}
+description: ${packageInfo.description || 'no description available'}
+author: ${packageInfo.author ? packageInfo.author.name : 'unknown'}
+license: ${packageInfo.license || 'not specified'}
+${packageInfo.homepage || 'homepage not specified'}
+            `.trim();
+
+            await reply(infoMessage);
+            log(chalk.green.bold(`successfully fetched npm package info for ${packageName}`));
+        } catch (error) {
+            log(chalk.red(`error fetching npm package info: ${error.message}`));
+            await reply(`error occurred while fetching information for package`);
+        }
+    },
+});
+bot.command("github-user", {
+    args: [{ name: "username", type: "string" }],
+    fn: async function (reply, [username], _post) {
+        log(chalk.blue(`Fetching GitHub user info for ${username}...`));
+        try {
+            const { data: user } = await octokit.users.getByUsername({ username });
+
+            const userInfo = `
+# ${user.login}
+name: ${user.name || 'Not specified'}
+bio: ${user.bio || 'No bio provided'}
+location: ${user.location || 'Not specified'}
+public Repos: ${user.public_repos}
+followers: ${user.followers}
+following: ${user.following}
+created: ${new Date(user.created_at).toDateString()}
+            `.trim();
+
+            await reply(userInfo);
+            log(chalk.green.bold(`Successfully fetched GitHub user info for ${username}`));
+        } catch (error) {
+            log(chalk.red(`Error fetching GitHub user info: ${error.message}`));
+            await reply(`An error occurred while fetching information for the user "${username}". Please make sure the username is correct.`);
         }
     },
 });
