@@ -1,6 +1,7 @@
 import { RoarBot } from "@mbw/roarbot";
 import chalk from "npm:chalk";
 import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
+import { Octokit } from "@octokit/rest";
 
 const config = JSON.parse(await Deno.readTextFile("config.json"));
 const log = console.log;
@@ -113,4 +114,33 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
+const octokit = new Octokit();
+
+bot.command("githubrepos", {
+    args: [{ name: "username", type: "string" }],
+    fn: async function (reply, [username], _post) {
+        log(chalk.blue(`fetching repositories`));
+        try {
+            const response = await octokit.repos.listForUser({
+                username: username,
+                per_page: 10
+            });
+
+            const repos = response.data.map(repo => repo.name);
+            
+            if (repos.length === 0) {
+                await reply(`no public repositories found for user`);
+            } else {
+                const repoList = repos.join(", ");
+                await reply(`repositories for ${username}:\n${repoList}`);
+            }
+            
+            log(chalk.green.bold(`successfully fetched repositories for ${username}`));
+        } catch (error) {
+            log(chalk.red(`error fetching repositories: ${error.message}`));
+            await reply(`error! please make sure username is correct`);
+        }
+    },
+});
+
 bot.login(config.botUsername, config.botPassword);
