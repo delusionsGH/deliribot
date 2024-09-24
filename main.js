@@ -214,7 +214,7 @@ bot.command("weatherdebug", {
             const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(config.debugWeatherLocation)}&appid=${apiKey}&units=metric`);
             const data = await response.json();
             if (data.cod === 200) {
-                const weather = `weather (debug)\n
+                const weather = `weather (no im not telling you the location)\n
 temp: ${data.main.temp}°C
 what the temp feels like: ${data.main.feels_like}°C
 humidity: ${data.main.humidity}%
