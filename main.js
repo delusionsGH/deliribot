@@ -204,5 +204,31 @@ created: ${new Date(user.created_at).toDateString()}
         }
     },
 });
-
+bot.command("weatherdebug", {
+    admin: true
+    args: [],
+    fn: async function (reply, _post) {
+        log(chalk.blue(`Fetching weather...`));
+        const apiKey = config.owm_api_key;
+        try {
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(config.debugWeatherLocation)}&appid=${apiKey}&units=metric`);
+            const data = await response.json();
+            if (data.cod === 200) {
+                const weather = `weather (debug)\n
+temp: ${data.main.temp}°C
+what the temp feels like: ${data.main.feels_like}°C
+humidity: ${data.main.humidity}%
+description of the sky: ${data.weather[0].description}`;
+                await reply(weather);
+                log(chalk.green.bold(`weather info delivered`));
+            } else {
+                await reply(`well guess what, i dont think that place exists`);
+                log(chalk.yellow(`could not find info`));
+            }
+        } catch (error) {
+            log(chalk.red(`error: ${error.message}`));
+            await reply("i dont feel like fetching the weather rn (joking, something broke)");
+        }
+    },
+});
 bot.login(config.botUsername, config.botPassword);
