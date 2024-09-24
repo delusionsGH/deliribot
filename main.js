@@ -186,8 +186,10 @@ bot.command("github-user", {
 
             const userInfo = `
 # ${user.login}
-name: ${user.name || 'not specified'}
+-# ${user.name || '<not specified>'}
+
 bio: ${user.bio || 'no bio provided'}
+
 location: ${user.location || 'not specified'}
 public repos: ${user.public_repos}
 followers: ${user.followers}
