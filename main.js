@@ -205,7 +205,7 @@ created: ${new Date(user.created_at).toDateString()}
     },
 });
 bot.command("weatherdebug", {
-    admin: true
+    admin: true,
     args: [],
     fn: async function (reply, _post) {
         log(chalk.blue(`Fetching weather...`));
