@@ -115,7 +115,7 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
-bot.command("githubrepos", {
+bot.command("ghrepos", {
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
         log(chalk.blue(`fetching repositories`));
@@ -177,7 +177,7 @@ ${packageInfo.homepage || 'homepage not specified'}
         }
     },
 });
-bot.command("github-user", {
+bot.command("ghuser", {
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
         log(chalk.blue(`fetching gh user info for...`));
