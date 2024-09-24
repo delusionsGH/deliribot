@@ -189,7 +189,6 @@ bot.command("github-user", {
 -# ${user.name || '<not specified>'}
 
 bio: ${user.bio || 'no bio provided'}
-
 location: ${user.location || 'not specified'}
 public repos: ${user.public_repos}
 followers: ${user.followers}
