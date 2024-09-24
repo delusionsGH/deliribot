@@ -180,26 +180,26 @@ ${packageInfo.homepage || 'homepage not specified'}
 bot.command("github-user", {
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
-        log(chalk.blue(`Fetching GitHub user info for ${username}...`));
+        log(chalk.blue(`fetching gh user info for...`));
         try {
             const { data: user } = await octokit.users.getByUsername({ username });
 
             const userInfo = `
 # ${user.login}
-name: ${user.name || 'Not specified'}
-bio: ${user.bio || 'No bio provided'}
-location: ${user.location || 'Not specified'}
-public Repos: ${user.public_repos}
+name: ${user.name || 'not specified'}
+bio: ${user.bio || 'no bio provided'}
+location: ${user.location || 'not specified'}
+public repos: ${user.public_repos}
 followers: ${user.followers}
 following: ${user.following}
 created: ${new Date(user.created_at).toDateString()}
             `.trim();
 
             await reply(userInfo);
-            log(chalk.green.bold(`Successfully fetched GitHub user info for ${username}`));
+            log(chalk.green.bold(`successfully fetched gh user info`));
         } catch (error) {
-            log(chalk.red(`Error fetching GitHub user info: ${error.message}`));
-            await reply(`An error occurred while fetching information for the user "${username}". Please make sure the username is correct.`);
+            log(chalk.red(`error fetching gh user info: ${error.message}`));
+            await reply(`error, make sure username is correct!`);
         }
     },
 });
