@@ -231,20 +231,43 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
-const words = ["python", "coding", "script", "array", "function", "variable", "loop"];
-
+let words = [];
 let currentWord = "";
 let guessesLeft = 6;
 let gameActive = false;
+let guessHistory = [];
+
+async function fetchWordList() {
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/tabatkins/wordle-list/main/words');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const text = await response.text();
+        words = text.split('\n').filter(word => word.trim() !== '');
+        log(chalk.green(`successfully fetched ${words.length} words`));
+    } catch (error) {
+        log(chalk.red(`Error fetching word list: ${error.message}`));
+        // If fetch fails, we'll use a small default list
+        words = ["python", "coding", "script", "array", "function", "variable", "loop"];
+    }
+}
+
+await fetchWordList();
 
 bot.command("wordle", {
     args: [{ name: "guess", type: "string", optional: true }],
     fn: async function (reply, [guess], _post) {
         if (!gameActive) {
+            if (words.length === 0) {
+                await reply("error: word list is empty.");
+                return;
+            }
             currentWord = words[Math.floor(Math.random() * words.length)];
             guessesLeft = 6;
             gameActive = true;
-            await reply("# game started!\nyou have 6 guesses\nuse 'wordle [your guess]' to play");
+            guessHistory = [];
+            await reply(`# game started!\nyou have 6 guesses\nuse 'wordle [your guess]' to play\nthe word has ${currentWord.length} letters`);
             return;
         }
 
@@ -262,7 +285,8 @@ bot.command("wordle", {
 
         if (guess.toLowerCase() === currentWord) {
             gameActive = false;
-            await reply(`# gg!\nyou guessed the word: ${currentWord}`);
+            guessHistory.push({ guess, result: "🟩".repeat(currentWord.length) });
+            await reply(`# gg!\nyou guessed the word: ${currentWord}\n\n${formatGuessHistory()}`);
             return;
         }
 
@@ -277,12 +301,21 @@ bot.command("wordle", {
             }
         }
 
+        guessHistory.push({ guess, result });
+
         if (guessesLeft === 0) {
             gameActive = false;
-            await reply(`# game over!\nword was: ${currentWord}\nyour last guess: ${result}`);
+            await reply(`# game over!\nword was: ${currentWord}\n\n${formatGuessHistory()}`);
         } else {
-            await reply(`${result}\nyou have ${guessesLeft} guesses left`);
+            await reply(`${formatGuessHistory()}\n\nyou have ${guessesLeft} guesses left`);
         }
     },
 });
+
+function formatGuessHistory() {
+    return guessHistory.map(({ guess, result }, index) => 
+        `guess ${index + 1}: ${guess.padEnd(currentWord.length)} ${result}`
+    ).join('\n');
+}
+
 bot.login(config.botUsername, config.botPassword);
