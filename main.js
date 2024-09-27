@@ -231,4 +231,58 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
+const words = ["python", "coding", "script", "array", "function", "variable", "loop"];
+
+let currentWord = "";
+let guessesLeft = 6;
+let gameActive = false;
+
+bot.command("wordle", {
+    args: [{ name: "guess", type: "string", optional: true }],
+    fn: async function (reply, [guess], _post) {
+        if (!gameActive) {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            guessesLeft = 6;
+            gameActive = true;
+            await reply("# game started!\nyou have 6 guesses\nuse 'wordle [your guess]' to play");
+            return;
+        }
+
+        if (!guess) {
+            await reply(`you have ${guessesLeft} guesses left, word has ${currentWord.length} letters`);
+            return;
+        }
+
+        if (guess.length !== currentWord.length) {
+            await reply(`your guess must be ${currentWord.length} letters long!`);
+            return;
+        }
+
+        guessesLeft--;
+
+        if (guess.toLowerCase() === currentWord) {
+            gameActive = false;
+            await reply(`# gg!\nyou guessed the word: ${currentWord}`);
+            return;
+        }
+
+        let result = "";
+        for (let i = 0; i < currentWord.length; i++) {
+            if (guess[i].toLowerCase() === currentWord[i]) {
+                result += "🟩";
+            } else if (currentWord.includes(guess[i].toLowerCase())) {
+                result += "🟨";
+            } else {
+                result += "⬜";
+            }
+        }
+
+        if (guessesLeft === 0) {
+            gameActive = false;
+            await reply(`# game over!\nword was: ${currentWord}\nyour last guess: ${result}`);
+        } else {
+            await reply(`${result}\nyou have ${guessesLeft} guesses left`);
+        }
+    },
+});
 bot.login(config.botUsername, config.botPassword);
