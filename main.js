@@ -402,4 +402,41 @@ function formatPollMessage(poll, pollId) {
     message += "\n-# how to vote: \"@deliribot vote [id] [option number]\"\n";
     return message;
 }
+
+const webhookUrl = config.discordWebhook;
+
+async function sendDiscordMessage(content) {
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                content: content,
+                username: `deliribot (${bot.user})`,
+            }),
+        });
+
+        if (response.ok) {
+            console.log('message sent successfully!');
+        } else {
+            console.error('failed to send message:', response.statusText);
+        }
+    } catch (error) {
+        console.error('error sending message:', error);
+    }
+}
+bot.command("webhook", {
+    args: [{ name: "message", type: "full" }],
+    fn: async function (reply, [message], _post) {
+        try {
+            await sendDiscordMessage(message);
+            await reply("message sent to discord via webhook!");
+        } catch (error) {
+            console.error('error in webhook command:', error);
+            await reply("sending message failed!");
+        }
+    }
+});
 bot.login(config.botUsername, config.botPassword);
