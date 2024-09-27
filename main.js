@@ -314,7 +314,7 @@ bot.command("wordle", {
 
 function formatGuessHistory() {
     return guessHistory.map(({ guess, result }) => 
-        `${guess.padEnd(currentWord.length)} | ${result}`
+        `${result} | ${guess.padEnd(currentWord.length)}`
     ).join('\n');
 }
 
