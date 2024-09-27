@@ -18,7 +18,7 @@ bot.command("about", { // sample command, copy for new commands
     args: [],
     fn: async function (reply, _args, _post) {
         await reply(
-            '```\ndeliribot (previously zzbot.js)\nversion v2.1.6 (240824)\nroarbot made by mybearworld, deliribot by delusions\n\nlatest command added: ai\n"does the ai thing"',
+            `***deliribot*** (previously zzbot.js)\nv3.0 ***BETA***\nroarbot made by mybearworld, deliribot by delusions\n-# This is a beta version of ***deliribot***. Report any issues on the ***deliribot*** GitHub: github.com/delusionsGH/deliribot`,
         );
     },
 });
@@ -311,11 +311,95 @@ bot.command("wordle", {
         }
     },
 });
-
 function formatGuessHistory() {
     return guessHistory.map(({ guess, result }) => 
         `${result} | ${guess.padEnd(currentWord.length)}`
     ).join('\n');
 }
+const polls = new Map();
 
+bot.command("poll", {
+    args: [{ name: "fullInput", type: "full" }],
+    fn: async function (reply, [fullInput], _post) {
+        log(chalk.blue(`Creating a new poll...`));
+        try {
+            const [question, optionsString] = fullInput.split('|').map(s => s.trim());
+            
+            if (!question || !optionsString) {
+                await reply("provide a question and options separated by '|'!\nexample: \`\`\`poll What's your favorite color? | Red, Blue, Green\`\`\`");
+                return;
+            }
+
+            const options = optionsString.split(',').map(option => option.trim());
+            
+            if (options.length < 2) {
+                await reply("provide at least two options!");
+                return;
+            }
+
+            const pollId = Date.now().toString();
+            const poll = {
+                question,
+                options: options.map(option => ({ text: option, votes: 0 })),
+                voters: new Set()
+            };
+
+            polls.set(pollId, poll);
+
+            const pollMessage = formatPollMessage(poll, pollId);
+            await reply(pollMessage);
+
+            log(chalk.green.bold(`poll created successfully`));
+        } catch (error) {
+            log(chalk.red(`error creating poll: ${error.message}`));
+            await reply("error creating poll!\nhost, see console for more info");
+        }
+    },
+});
+bot.command("vote", {
+    args: [
+        { name: "pollId", type: "string" },
+        { name: "optionIndex", type: "number" }
+    ],
+    fn: async function (reply, [pollId, optionIndex], post) {
+        log(chalk.blue(`processing vote...`));
+        try {
+            const poll = polls.get(pollId);
+            if (!poll) {
+                await reply("invalid poll id!\nthe poll may have expired or doesn't exist");
+                return;
+            }
+
+            if (poll.voters.has(post.userId)) {
+                await reply("you have already voted in this poll!");
+                return;
+            }
+
+            if (optionIndex < 1 || optionIndex > poll.options.length) {
+                await reply(`invalid option!\nplease choose a number between 1 and ${poll.options.length}`);
+                return;
+            }
+
+            poll.options[optionIndex - 1].votes++;
+            poll.voters.add(post.userId);
+
+            const updatedPollMessage = formatPollMessage(poll, pollId);
+            await reply(updatedPollMessage);
+
+            log(chalk.green.bold(`vote processed successfully!`));
+        } catch (error) {
+            log(chalk.red(`error processing vote: ${error.message}`));
+            await reply(`error processing vote!\nhost, see console for more info`);
+        }
+    },
+});
+function formatPollMessage(poll, pollId) {
+    let message = `# ${poll.question}\n`;
+    message += `(${pollId})\n\n`;
+    poll.options.forEach((option, index) => {
+        message += `${index + 1}: ${option.text} | ${option.votes} votes\n`;
+    });
+    message += "\n-# how to vote: \"@deliribot vote [id] [option number]\"\n";
+    return message;
+}
 bot.login(config.botUsername, config.botPassword);
