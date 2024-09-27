@@ -313,8 +313,8 @@ bot.command("wordle", {
 });
 
 function formatGuessHistory() {
-    return guessHistory.map(({ guess, result }, index) => 
-        `guess ${index + 1}: ${guess.padEnd(currentWord.length)} ${result}`
+    return guessHistory.map(({ guess, result }) => 
+        `${guess.padEnd(currentWord.length)} | ${result}`
     ).join('\n');
 }
 
