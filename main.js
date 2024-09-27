@@ -89,7 +89,7 @@ bot.command("joke", { // tells a joke, what else can i say
         }
     },
 });
-bot.command("weather", {
+bot.command("weather", { // weather
     args: [{ name: "city", type: "full" }],
     fn: async function (reply, [city], _post) {
         log(chalk.blue(`Fetching weather...`));
@@ -115,7 +115,7 @@ description of the sky: ${data.weather[0].description}`;
         }
     },
 });
-bot.command("ghrepos", {
+bot.command("ghrepos", { // github repo search for users
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
         log(chalk.blue(`fetching repositories`));
@@ -141,7 +141,7 @@ bot.command("ghrepos", {
         }
     },
 });
-bot.command("npm", {
+bot.command("npm", { // looks for the data of an npm package
     args: [{ name: "package", type: "string" }],
     fn: async function (reply, [packageName], _post) {
         log(chalk.blue(`Fetching npm package info...`));
@@ -177,7 +177,7 @@ ${packageInfo.homepage || 'homepage not specified'}
         }
     },
 });
-bot.command("ghuser", {
+bot.command("ghuser", { // github userdata
     args: [{ name: "username", type: "string" }],
     fn: async function (reply, [username], _post) {
         log(chalk.blue(`fetching gh user info for...`));
@@ -204,7 +204,7 @@ created: ${new Date(user.created_at).toDateString()}
         }
     },
 });
-bot.command("weatherdebug", {
+bot.command("weatherdebug", { // debug
     admin: true,
     args: [],
     fn: async function (reply, _post) {
@@ -255,7 +255,7 @@ async function fetchWordList() {
 
 await fetchWordList();
 
-bot.command("wordle", {
+bot.command("wordle", { // wordle by josh wardle, ported to meower
     args: [{ name: "guess", type: "string", optional: true }],
     fn: async function (reply, [guess], _post) {
         if (!gameActive) {
@@ -318,7 +318,7 @@ function formatGuessHistory() {
 }
 const polls = new Map();
 
-bot.command("poll", {
+bot.command("poll", { // polls because meower wont add them
     args: [{ name: "fullInput", type: "full" }],
     fn: async function (reply, [fullInput], _post) {
         log(chalk.blue(`Creating a new poll...`));
@@ -356,7 +356,7 @@ bot.command("poll", {
         }
     },
 });
-bot.command("vote", {
+bot.command("vote", { // part of polls
     args: [
         { name: "pollId", type: "string" },
         { name: "optionIndex", type: "number" }
