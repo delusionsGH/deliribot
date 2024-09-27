@@ -307,7 +307,7 @@ bot.command("wordle", {
             gameActive = false;
             await reply(`# game over!\nword was: ${currentWord}\n\n${formatGuessHistory()}`);
         } else {
-            await reply(`${formatGuessHistory()}\n\nyou have ${guessesLeft} guesses left`);
+            await reply(`${formatGuessHistory()});
         }
     },
 });
