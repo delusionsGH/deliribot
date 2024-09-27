@@ -297,7 +297,7 @@ bot.command("wordle", {
             } else if (currentWord.includes(guess[i].toLowerCase())) {
                 result += "🟨";
             } else {
-                result += "⬜";
+                result += "⬛";
             }
         }
 
