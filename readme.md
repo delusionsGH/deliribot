@@ -1,8 +1,9 @@
 THIS IS THE UNSTABLE/DEVELOPMENT VERSION OF DELIRIBOT, IT WILL BREAK ***A LOT!!!***
 
-YOU NEED TO MAKE A CONFIG.JSON FILE WITH THE ```botUsername, botPassword and adminUsername``` KEYS!!!!!
-
-OTHERWISE THE BOT WILL NOT WORK!!!!!!!
+> [!WARNING]
+> You need to make a ``config.json`` file with the ```botUsername, botPassword and adminUsername``` keys!
+> 
+> OTHERWISE THE BOT WILL NOT WORK!
 
 how to start:
 1. cd to the file's directory in cmd
