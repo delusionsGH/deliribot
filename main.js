@@ -51,7 +51,7 @@ bot.command("exit", { // goobye
     args: [],
     admin: true,
     fn: async function (reply, _args, _post) {
-            await reply("Shutting down zzbot.js.");
+            await reply("Shutting down!");
             Deno.exit();
         }
     },
