@@ -1,4 +1,4 @@
-[mural](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
+![mural](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
 
 > [!WARNING]
 > You need to make a ``config.json`` file with the ```botUsername, botPassword and adminUsername``` keys!
