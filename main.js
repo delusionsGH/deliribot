@@ -4,7 +4,6 @@ import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
 import { Octokit } from "@octokit/rest";
 import fetch from "node-fetch";
 const octokit = new Octokit();
-
 const config = JSON.parse(await Deno.readTextFile("config.json"));
 const log = console.log;
 log(chalk.blue(`setting ai model...`));
@@ -18,7 +17,7 @@ bot.command("about", { // sample command, copy for new commands
     args: [],
     fn: async function (reply, _args, _post) {
         await reply(
-            `***deliribot*** (previously zzbot.js)\nv3.0 ***BETA***\nroarbot made by mybearworld, deliribot by delusions\n-# This is a beta version of ***deliribot***. Report any issues on the ***deliribot*** GitHub: github.com/delusionsGH/deliribot`,
+            `***deliribot***\nv3.0 ***BETA***\n-# roarbot made by mybearworld, ***deliribot*** by delusions\n-# This is a beta version of ***deliribot***. Report any issues on the ***deliribot*** GitHub: github.com/delusionsGH/deliribot`,
         );
     },
 });
@@ -38,7 +37,7 @@ bot.command("whois", { // looks for the data of a user, YES I KNOW "fetc" IS WEI
         log(chalk.green.bold(`whois successfully run!`)); // yay it worked
     },
 });
-bot.command("error", {
+bot.command("error", { // Uncaught error!
     args: [],
     admin: true,
     fn: async function (reply, _args, _post) {
@@ -48,7 +47,7 @@ bot.command("error", {
         }
     },
 );
-bot.command("exit", {
+bot.command("exit", { // goobye
     args: [],
     admin: true,
     fn: async function (reply, _args, _post) {
@@ -153,7 +152,7 @@ bot.command("npm", { // looks for the data of an npm package
             const data = await response.json();
 
             if (data.error) {
-                await reply(`packagenot found!`);
+                await reply(`package not found!`);
                 return;
             }
 
@@ -402,9 +401,7 @@ function formatPollMessage(poll, pollId) {
     message += "\n-# how to vote: \"@deliribot vote [id] [option number]\"\n";
     return message;
 }
-
 const webhookUrl = config.discordWebhook;
-
 async function sendDiscordMessage(content) {
     try {
         const response = await fetch(webhookUrl, {
@@ -419,20 +416,21 @@ async function sendDiscordMessage(content) {
         });
 
         if (response.ok) {
-            console.log('message sent successfully!');
+            chalk.green.bold('message sent successfully!');
         } else {
-            console.error('failed to send message:', response.statusText);
+            chalk.red.bold('failed to send message:', response.statusText);
         }
     } catch (error) {
         console.error('error sending message:', error);
     }
 }
-bot.command("webhook", {
+bot.command("webhook", { // sends to a webhook url of your choice
     args: [{ name: "message", type: "full" }],
     fn: async function (reply, [message], _post) {
+
         try {
             await sendDiscordMessage(message);
-            await reply("message sent to discord via webhook!");
+            await reply(`attempted to send to discord via webhook`);
         } catch (error) {
             console.error('error in webhook command:', error);
             await reply("sending message failed!");
