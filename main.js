@@ -437,4 +437,76 @@ bot.command("webhook", { // sends to a webhook url of your choice
         }
     }
 });
+const ENDPOINT_NAMES = new Map([
+    ['uploads.meower.org', 'uploads'],
+    ['api.meower.org/search', 'search'],
+    ['api.meower.org', 'api'],
+    ['api.meower.org/users/', 'apiuserdata'],
+    ['api.meower.org/users/deliribot/posts', 'apiuserpost']
+]);
+async function checkEndpoint(url) {
+    try {
+        const response = await fetch(url);
+        return { endpoint: url, isUp: response.ok };
+    } catch (_error) {
+        return { endpoint: url, isUp: false };
+    }
+}
+function checkMeowerAPI() {
+    const endpoints = [
+        'https://uploads.meower.org/attachments/LSXA9oIyV7D1PNoLSTyv6dPQ/Frame_1.png?preview',
+        'https://api.meower.org',
+        'https://api.meower.org/search/home?autoget=1&page=1&q=hi',
+        'https://api.meower.org/users/deliribot',
+        'https://api.meower.org/users/deliribot/posts?autoget=1&page=1'
+    ];
+    return Promise.allSettled(endpoints.map(checkEndpoint));
+}
+function formatDate(date) {
+    const months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    const monthName = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${day}/${monthName}/${year}, ${hours}:${minutes}`;
+}
+bot.command("meowerdiag", {
+    args: [],
+    fn: async function (reply, _post) {
+        log(chalk.blue(`checking...`));
+        await reply("checking...\n\n-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon")
+        try {
+            const apiStatus = await checkMeowerAPI();
+            const statusLines = apiStatus.map(result => {
+                if (result.status === 'fulfilled') {
+                    const { endpoint, isUp } = result.value;
+                    const status = isUp ? "🟢 UP" : "🔴 DOWN";
+                    const name = getEndpointName(endpoint);
+                    return `${name} | ${status}`;
+                }
+                return null;
+            }).filter(Boolean);
+            const statusMessage = [
+                `current state of meower services as of ${formatDate(new Date(Date.now()))}:`,
+                ...statusLines,
+                '',
+                '-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon'
+            ].join('\n\n');
+            await reply(statusMessage);
+            log(chalk.green.bold(`status check completed`));
+        } catch (error) {
+            log(chalk.red(`error checking status: ${error.message}`));
+            await reply("error!");
+        }
+    },
+});
+function getEndpointName(endpoint) {
+    for (const [key, value] of ENDPOINT_NAMES.entries()) {
+        if (endpoint.includes(key)) {
+            return value;
+        }
+    }
+    return 'unknown';
+}
 bot.login(config.botUsername, config.botPassword);
