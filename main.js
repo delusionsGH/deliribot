@@ -3,8 +3,29 @@ import chalk from "npm:chalk";
 import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
 import { Octokit } from "@octokit/rest";
 import fetch from "node-fetch";
+import "jsr:@std/dotenv/load";
 const octokit = new Octokit();
-const config = JSON.parse(await Deno.readTextFile("config.json"));
+const config = {};
+
+if (Deno.env.get("adminUsername") != undefined) {
+    config.adminUsername = Deno.env.get("adminUsername");
+}
+if (Deno.env.get("owm_api_key") != undefined) {
+    config.owm_api_key = Deno.env.get("owm_api_key");
+}
+if (Deno.env.get("debugWeatherLocation") != undefined) {
+    config.debugWeatherLocation = Deno.env.get("debugWeatherLocation");
+}
+if (Deno.env.get("botUsername") != undefined) {
+    config.botUsername = Deno.env.get("botUsername");
+}
+if (Deno.env.get("botPassword") != undefined) {
+    config.botPassword = Deno.env.get("botPassword");
+}
+if (Deno.env.get("discordWebhook") != undefined) {
+    config.discordWebhook = Deno.env.get("discordWebhook");
+}
+
 const log = console.log;
 log(chalk.blue(`setting ai model...`));
 const ai = await initChat("gpt-4o-mini");
