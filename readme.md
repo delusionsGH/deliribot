@@ -1,7 +1,7 @@
 ![mural](https://u.cubeupload.com/zzbooplister/d0fFrame1.png)
 
 > [!WARNING]
-> You need to make a ``config.json`` file with the ```botUsername, botPassword and adminUsername``` keys!
+> You need to make a ``.env`` file with the ```botUsername, botPassword and adminUsername``` keys!
 > 
 > OTHERWISE THE BOT WILL NOT WORK!
 
