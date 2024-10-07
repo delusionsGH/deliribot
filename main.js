@@ -25,6 +25,21 @@ if (Deno.env.get("botPassword") != undefined) {
 if (Deno.env.get("discordWebhook") != undefined) {
     config.discordWebhook = Deno.env.get("discordWebhook");
 }
+if (Deno.env.get("hbUrl") != undefined) {
+    config.hbUrl = Deno.env.get("hbUrl");
+
+    setInterval(() => {
+        try {
+          fetch(config.hbUrl);
+          console.log("HeartBeat sent to " + config.hbUrl);
+        } catch (error) {
+          console.log("Heartbeat failed");
+          console.error(error);
+        }
+      }, 90000);
+
+}
+
 
 const log = console.log;
 log(chalk.blue(`setting ai model...`));
