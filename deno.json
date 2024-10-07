@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-all --watch main.js"
+  },
+  "imports": {
+    "@mbw/roarbot": "jsr:@mbw/roarbot@^1.6.3",
+    "@mumulhl/duckduckgo-ai-chat": "jsr:@mumulhl/duckduckgo-ai-chat@^3.0.0",
+    "@octokit/rest": "npm:@octokit/rest@^21.0.2",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "chalk": "npm:chalk@^5.3.0",
+    "node-fetch": "npm:node-fetch@^3.3.2"
+  }
+}
