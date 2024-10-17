@@ -9,6 +9,7 @@ const config = {};
 
 if (Deno.env.get("adminUsername") != undefined) {
     config.adminUsername = Deno.env.get("adminUsername");
+    config.adminUsername = config.adminUsername.split(",");
 }
 if (Deno.env.get("owm_api_key") != undefined) {
     config.owm_api_key = Deno.env.get("owm_api_key");
@@ -47,7 +48,7 @@ const ai = await initChat("gpt-4o-mini");
 const aiModel = "gpt-4o-mini";
 log(chalk.blue(`set model to ${aiModel}.`));
 const bot = new RoarBot({
-    admins: [config.adminUsername],
+    admins: config.adminUsername,
 });
 bot.command("about", { // sample command, copy for new commands
     args: [],
