@@ -1,6 +1,6 @@
-import { RoarBot } from "@mbw/roarbot";
+import { RoarBot } from "jsr:/@mbw/roarbot";
 import chalk from "npm:chalk";
-import { initChat } from "@mumulhl/duckduckgo-ai-chat/";
+import { initChat } from "jsr:/@mumulhl/duckduckgo-ai-chat/";
 import { Octokit } from "@octokit/rest";
 import fetch from "node-fetch";
 const octokit = new Octokit();
@@ -32,7 +32,10 @@ bot.command("whois", { // looks for the data of a user, YES I KNOW "fetc" IS WEI
             return;
         }
         log(chalk.green(`fetched @${name}'s userdata`));
-        const result = `# ***@${name}***\n[link to profile picture](https://uploads.meower.org/icons/${fetc.avatar})\n\n**Quote:**\n${fetc.quote.replace(/^/gm, "> ")}\n\n**UUID:** "${fetc.uuid}"\n**Avatar's hex code:**  #${fetc.avatar_color}\n**Permission level**: ${fetc.permissions}`; // combine it all
+        const result =
+            `# ***@${name}***\n[link to profile picture](https://uploads.meower.org/icons/${fetc.avatar})\n\n**Quote:**\n${
+                fetc.quote.replace(/^/gm, "> ")
+            }\n\n**UUID:** "${fetc.uuid}"\n**Avatar's hex code:**  #${fetc.avatar_color}\n**Permission level**: ${fetc.permissions}`; // combine it all
         await reply(result);
         log(chalk.green.bold(`whois successfully run!`)); // yay it worked
     },
@@ -41,21 +44,19 @@ bot.command("error", { // Uncaught error!
     args: [],
     admin: true,
     fn: async function (reply, _args, _post) {
-            for (let i = 0; i < 3; i++) {
-                await reply("Uncaught error!");
-            }
+        for (let i = 0; i < 3; i++) {
+            await reply("Uncaught error!");
         }
     },
-);
+});
 bot.command("exit", { // goobye
     args: [],
     admin: true,
     fn: async function (reply, _args, _post) {
-            await reply("Shutting down!");
-            Deno.exit();
-        }
+        await reply("Shutting down!");
+        Deno.exit();
     },
-);
+});
 bot.command("echo", { // does the bot work? if this command works, it certainly does, at least partially
     args: [{ name: "message", type: "full" }],
     admin: true,
@@ -66,19 +67,20 @@ bot.command("echo", { // does the bot work? if this command works, it certainly 
 bot.command("ai", { // ai chat
     args: [{ name: "message", type: "full" }],
     fn: async function (reply, [message], _post) {
-            log(chalk.blue(`sending message ("${message}")...`));
-            const aimessage = await ai.fetchFull(message);
-            await reply(aimessage);
-            log(chalk.green.bold(`${aiModel} replied with: ${aimessage}`));
-        }
+        log(chalk.blue(`sending message ("${message}")...`));
+        const aimessage = await ai.fetchFull(message);
+        await reply(aimessage);
+        log(chalk.green.bold(`${aiModel} replied with: ${aimessage}`));
     },
-);
+});
 bot.command("joke", { // tells a joke, what else can i say
     args: [],
     fn: async function (reply, _args, _post) {
         log(chalk.blue(`fetching, give me a second`));
         try {
-            const response = await fetch("https://official-joke-api.appspot.com/random_joke");
+            const response = await fetch(
+                "https://official-joke-api.appspot.com/random_joke",
+            );
             const joke = await response.json();
             await reply(`here you go:\n\n${joke.setup}\n${joke.punchline}`);
             log(chalk.green.bold(`delivered!`));
@@ -94,7 +96,11 @@ bot.command("weather", { // weather
         log(chalk.blue(`Fetching weather...`));
         const apiKey = config.owm_api_key;
         try {
-            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`);
+            const response = await fetch(
+                `http://api.openweathermap.org/data/2.5/weather?q=${
+                    encodeURIComponent(city)
+                }&appid=${apiKey}&units=metric`,
+            );
             const data = await response.json();
             if (data.cod === 200) {
                 const weather = `weather in ${data.name}:\n
@@ -110,7 +116,9 @@ description of the sky: ${data.weather[0].description}`;
             }
         } catch (error) {
             log(chalk.red(`error: ${error.message}`));
-            await reply("i dont feel like fetching the weather rn (joking, something broke)");
+            await reply(
+                "i dont feel like fetching the weather rn (joking, something broke)",
+            );
         }
     },
 });
@@ -121,19 +129,21 @@ bot.command("ghrepos", { // github repo search for users
         try {
             const response = await octokit.repos.listForUser({
                 username: username,
-                per_page: 10
+                per_page: 10,
             });
 
-            const repos = response.data.map(repo => repo.name);
-            
+            const repos = response.data.map((repo) => repo.name);
+
             if (repos.length === 0) {
                 await reply(`no public repositories found for user`);
             } else {
                 const repoList = repos.join(", ");
                 await reply(`repositories for ${username}:\n${repoList}`);
             }
-            
-            log(chalk.green.bold(`successfully fetched repositories for ${username}`));
+
+            log(chalk.green.bold(
+                `successfully fetched repositories for ${username}`,
+            ));
         } catch (error) {
             log(chalk.red(`error fetching repositories: ${error.message}`));
             await reply(`error! please make sure username is correct`);
@@ -145,7 +155,9 @@ bot.command("npm", { // looks for the data of an npm package
     fn: async function (reply, [packageName], _post) {
         log(chalk.blue(`Fetching npm package info...`));
         try {
-            const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+            const response = await fetch(
+                `https://registry.npmjs.org/${packageName}`,
+            );
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -156,23 +168,27 @@ bot.command("npm", { // looks for the data of an npm package
                 return;
             }
 
-            const latestVersion = data['dist-tags'].latest;
+            const latestVersion = data["dist-tags"].latest;
             const packageInfo = data.versions[latestVersion];
 
             const infoMessage = `
 # ${packageName}
 latest version: ${latestVersion}
-description: ${packageInfo.description || 'no description available'}
-author: ${packageInfo.author ? packageInfo.author.name : 'unknown'}
-license: ${packageInfo.license || 'not specified'}
-${packageInfo.homepage || 'homepage not specified'}
+description: ${packageInfo.description || "no description available"}
+author: ${packageInfo.author ? packageInfo.author.name : "unknown"}
+license: ${packageInfo.license || "not specified"}
+${packageInfo.homepage || "homepage not specified"}
             `.trim();
 
             await reply(infoMessage);
-            log(chalk.green.bold(`successfully fetched npm package info for ${packageName}`));
+            log(chalk.green.bold(
+                `successfully fetched npm package info for ${packageName}`,
+            ));
         } catch (error) {
             log(chalk.red(`error fetching npm package info: ${error.message}`));
-            await reply(`error occurred while fetching information for package`);
+            await reply(
+                `error occurred while fetching information for package`,
+            );
         }
     },
 });
@@ -181,14 +197,16 @@ bot.command("ghuser", { // github userdata
     fn: async function (reply, [username], _post) {
         log(chalk.blue(`fetching gh user info for...`));
         try {
-            const { data: user } = await octokit.users.getByUsername({ username });
+            const { data: user } = await octokit.users.getByUsername({
+                username,
+            });
 
             const userInfo = `
 # ${user.login}
--# ${user.name || '<not specified>'}
+-# ${user.name || "<not specified>"}
 
-bio: ${user.bio || 'no bio provided'}
-location: ${user.location || 'not specified'}
+bio: ${user.bio || "no bio provided"}
+location: ${user.location || "not specified"}
 public repos: ${user.public_repos}
 followers: ${user.followers}
 following: ${user.following}
@@ -210,7 +228,11 @@ bot.command("weatherdebug", { // debug
         log(chalk.blue(`Fetching weather...`));
         const apiKey = config.owm_api_key;
         try {
-            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(config.debugWeatherLocation)}&appid=${apiKey}&units=metric`);
+            const response = await fetch(
+                `http://api.openweathermap.org/data/2.5/weather?q=${
+                    encodeURIComponent(config.debugWeatherLocation)
+                }&appid=${apiKey}&units=metric`,
+            );
             const data = await response.json();
             if (data.cod === 200) {
                 const weather = `weather (no im not telling you the location)\n
@@ -226,7 +248,9 @@ description of the sky: ${data.weather[0].description}`;
             }
         } catch (error) {
             log(chalk.red(`error: ${error.message}`));
-            await reply("i dont feel like fetching the weather rn (joking, something broke)");
+            await reply(
+                "i dont feel like fetching the weather rn (joking, something broke)",
+            );
         }
     },
 });
@@ -238,17 +262,27 @@ let guessHistory = [];
 
 async function fetchWordList() {
     try {
-        const response = await fetch('https://raw.githubusercontent.com/tabatkins/wordle-list/main/words');
+        const response = await fetch(
+            "https://raw.githubusercontent.com/tabatkins/wordle-list/main/words",
+        );
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const text = await response.text();
-        words = text.split('\n').filter(word => word.trim() !== '');
+        words = text.split("\n").filter((word) => word.trim() !== "");
         log(chalk.green(`successfully fetched ${words.length} words`));
     } catch (error) {
         log(chalk.red(`Error fetching word list: ${error.message}`));
         // If fetch fails, we'll use a small default list
-        words = ["python", "coding", "script", "array", "function", "variable", "loop"];
+        words = [
+            "python",
+            "coding",
+            "script",
+            "array",
+            "function",
+            "variable",
+            "loop",
+        ];
     }
 }
 
@@ -266,17 +300,23 @@ bot.command("wordle", { // wordle by josh wardle, ported to meower
             guessesLeft = 6;
             gameActive = true;
             guessHistory = [];
-            await reply(`# game started!\nyou have 6 guesses\nuse 'wordle [your guess]' to play\nthe word has ${currentWord.length} letters`);
+            await reply(
+                `# game started!\nyou have 6 guesses\nuse 'wordle [your guess]' to play\nthe word has ${currentWord.length} letters`,
+            );
             return;
         }
 
         if (!guess) {
-            await reply(`you have ${guessesLeft} guesses left, word has ${currentWord.length} letters`);
+            await reply(
+                `you have ${guessesLeft} guesses left, word has ${currentWord.length} letters`,
+            );
             return;
         }
 
         if (guess.length !== currentWord.length) {
-            await reply(`your guess must be ${currentWord.length} letters long!`);
+            await reply(
+                `your guess must be ${currentWord.length} letters long!`,
+            );
             return;
         }
 
@@ -284,8 +324,13 @@ bot.command("wordle", { // wordle by josh wardle, ported to meower
 
         if (guess.toLowerCase() === currentWord) {
             gameActive = false;
-            guessHistory.push({ guess, result: "🟩".repeat(currentWord.length) });
-            await reply(`# gg!\nyou guessed the word: ${currentWord}\n\n${formatGuessHistory()}`);
+            guessHistory.push({
+                guess,
+                result: "🟩".repeat(currentWord.length),
+            });
+            await reply(
+                `# gg!\nyou guessed the word: ${currentWord}\n\n${formatGuessHistory()}`,
+            );
             return;
         }
 
@@ -304,16 +349,18 @@ bot.command("wordle", { // wordle by josh wardle, ported to meower
 
         if (guessesLeft === 0) {
             gameActive = false;
-            await reply(`# game over!\nword was: ${currentWord}\n\n${formatGuessHistory()}`);
+            await reply(
+                `# game over!\nword was: ${currentWord}\n\n${formatGuessHistory()}`,
+            );
         } else {
             await reply(`${formatGuessHistory()}`);
         }
     },
 });
 function formatGuessHistory() {
-    return guessHistory.map(({ guess, result }) => 
+    return guessHistory.map(({ guess, result }) =>
         `${result} | ${guess.padEnd(currentWord.length)}`
-    ).join('\n');
+    ).join("\n");
 }
 const polls = new Map();
 
@@ -322,15 +369,21 @@ bot.command("poll", { // polls because meower wont add them
     fn: async function (reply, [fullInput], _post) {
         log(chalk.blue(`Creating a new poll...`));
         try {
-            const [question, optionsString] = fullInput.split('|').map(s => s.trim());
-            
+            const [question, optionsString] = fullInput.split("|").map((s) =>
+                s.trim()
+            );
+
             if (!question || !optionsString) {
-                await reply("provide a question and options separated by '|'!\nexample: \`\`\`poll What's your favorite color? | Red, Blue, Green\`\`\`");
+                await reply(
+                    "provide a question and options separated by '|'!\nexample: \`\`\`poll What's your favorite color? | Red, Blue, Green\`\`\`",
+                );
                 return;
             }
 
-            const options = optionsString.split(',').map(option => option.trim());
-            
+            const options = optionsString.split(",").map((option) =>
+                option.trim()
+            );
+
             if (options.length < 2) {
                 await reply("provide at least two options!");
                 return;
@@ -339,8 +392,8 @@ bot.command("poll", { // polls because meower wont add them
             const pollId = Date.now().toString();
             const poll = {
                 question,
-                options: options.map(option => ({ text: option, votes: 0 })),
-                voters: new Set()
+                options: options.map((option) => ({ text: option, votes: 0 })),
+                voters: new Set(),
             };
 
             polls.set(pollId, poll);
@@ -351,21 +404,25 @@ bot.command("poll", { // polls because meower wont add them
             log(chalk.green.bold(`poll created successfully`));
         } catch (error) {
             log(chalk.red(`error creating poll: ${error.message}`));
-            await reply("error creating poll!\nhost, see console for more info");
+            await reply(
+                "error creating poll!\nhost, see console for more info",
+            );
         }
     },
 });
 bot.command("vote", { // part of polls
     args: [
         { name: "pollId", type: "string" },
-        { name: "optionIndex", type: "number" }
+        { name: "optionIndex", type: "number" },
     ],
     fn: async function (reply, [pollId, optionIndex], post) {
         log(chalk.blue(`processing vote...`));
         try {
             const poll = polls.get(pollId);
             if (!poll) {
-                await reply("invalid poll id!\nthe poll may have expired or doesn't exist");
+                await reply(
+                    "invalid poll id!\nthe poll may have expired or doesn't exist",
+                );
                 return;
             }
 
@@ -375,7 +432,9 @@ bot.command("vote", { // part of polls
             }
 
             if (optionIndex < 1 || optionIndex > poll.options.length) {
-                await reply(`invalid option!\nplease choose a number between 1 and ${poll.options.length}`);
+                await reply(
+                    `invalid option!\nplease choose a number between 1 and ${poll.options.length}`,
+                );
                 return;
             }
 
@@ -388,7 +447,9 @@ bot.command("vote", { // part of polls
             log(chalk.green.bold(`vote processed successfully!`));
         } catch (error) {
             log(chalk.red(`error processing vote: ${error.message}`));
-            await reply(`error processing vote!\nhost, see console for more info`);
+            await reply(
+                `error processing vote!\nhost, see console for more info`,
+            );
         }
     },
 });
@@ -398,16 +459,16 @@ function formatPollMessage(poll, pollId) {
     poll.options.forEach((option, index) => {
         message += `${index + 1}: ${option.text} | ${option.votes} votes\n`;
     });
-    message += "\n-# how to vote: \"@deliribot vote [id] [option number]\"\n";
+    message += '\n-# how to vote: "@deliribot vote [id] [option number]"\n';
     return message;
 }
 const webhookUrl = config.discordWebhook;
 async function sendDiscordMessage(content) {
     try {
         const response = await fetch(webhookUrl, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 content: content,
@@ -416,33 +477,32 @@ async function sendDiscordMessage(content) {
         });
 
         if (response.ok) {
-            chalk.green.bold('message sent successfully!');
+            chalk.green.bold("message sent successfully!");
         } else {
-            chalk.red.bold('failed to send message:', response.statusText);
+            chalk.red.bold("failed to send message:", response.statusText);
         }
     } catch (error) {
-        console.error('error sending message:', error);
+        console.error("error sending message:", error);
     }
 }
 bot.command("webhook", { // sends to a webhook url of your choice
     args: [{ name: "message", type: "full" }],
     fn: async function (reply, [message], _post) {
-
         try {
             await sendDiscordMessage(message);
             await reply(`attempted to send to discord via webhook`);
         } catch (error) {
-            console.error('error in webhook command:', error);
+            console.error("error in webhook command:", error);
             await reply("sending message failed!");
         }
-    }
+    },
 });
 const ENDPOINT_NAMES = new Map([
-    ['uploads.meower.org', 'uploads'],
-    ['api.meower.org/search', 'search'],
-    ['api.meower.org', 'api'],
-    ['api.meower.org/users/', 'apiuserdata'],
-    ['api.meower.org/users/deliribot/posts', 'apiuserpost']
+    ["uploads.meower.org", "uploads"],
+    ["api.meower.org/search", "search"],
+    ["api.meower.org", "api"],
+    ["api.meower.org/users/", "apiuserdata"],
+    ["api.meower.org/users/deliribot/posts", "apiuserpost"],
 ]);
 async function checkEndpoint(url) {
     try {
@@ -454,32 +514,47 @@ async function checkEndpoint(url) {
 }
 function checkMeowerAPI() {
     const endpoints = [
-        'https://uploads.meower.org/attachments/LSXA9oIyV7D1PNoLSTyv6dPQ/Frame_1.png?preview',
-        'https://api.meower.org',
-        'https://api.meower.org/search/home?autoget=1&page=1&q=hi',
-        'https://api.meower.org/users/deliribot',
-        'https://api.meower.org/users/deliribot/posts?autoget=1&page=1'
+        "https://uploads.meower.org/attachments/LSXA9oIyV7D1PNoLSTyv6dPQ/Frame_1.png?preview",
+        "https://api.meower.org",
+        "https://api.meower.org/search/home?autoget=1&page=1&q=hi",
+        "https://api.meower.org/users/deliribot",
+        "https://api.meower.org/users/deliribot/posts?autoget=1&page=1",
     ];
     return Promise.allSettled(endpoints.map(checkEndpoint));
 }
 function formatDate(date) {
-    const months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    const months = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+    ];
     const monthName = months[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${day}/${monthName}/${year}, ${hours}:${minutes}`;
 }
 bot.command("meowerdiag", {
     args: [],
     fn: async function (reply, _post) {
         log(chalk.blue(`checking...`));
-        await reply("checking...\n\n-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon")
+        await reply(
+            "checking...\n\n-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon",
+        );
         try {
             const apiStatus = await checkMeowerAPI();
-            const statusLines = apiStatus.map(result => {
-                if (result.status === 'fulfilled') {
+            const statusLines = apiStatus.map((result) => {
+                if (result.status === "fulfilled") {
                     const { endpoint, isUp } = result.value;
                     const status = isUp ? "🟢 UP" : "🔴 DOWN";
                     const name = getEndpointName(endpoint);
@@ -488,11 +563,13 @@ bot.command("meowerdiag", {
                 return null;
             }).filter(Boolean);
             const statusMessage = [
-                `current state of meower services as of ${formatDate(new Date(Date.now()))}:`,
+                `current state of meower services as of ${
+                    formatDate(new Date(Date.now()))
+                }:`,
                 ...statusLines,
-                '',
-                '-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon'
-            ].join('\n\n');
+                "",
+                "-# meowerDiag (BETA) v0.1.0, may not be correct\n-# does not have full diagnostics, will add more soon",
+            ].join("\n\n");
             await reply(statusMessage);
             log(chalk.green.bold(`status check completed`));
         } catch (error) {
@@ -507,6 +584,6 @@ function getEndpointName(endpoint) {
             return value;
         }
     }
-    return 'unknown';
+    return "unknown";
 }
 bot.login(config.botUsername, config.botPassword);
