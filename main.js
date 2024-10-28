@@ -28,7 +28,7 @@ if (Deno.env.get("discordWebhook") != undefined) {
 }
 if (Deno.env.get("hbUrl") != undefined) {
     config.hbUrl = Deno.env.get("hbUrl");
-
+}
     if (Deno.env.get("testUser") != undefined) {
     config.discordWebhook = Deno.env.get("testUser");
 
